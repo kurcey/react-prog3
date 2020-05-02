@@ -1,5 +1,4 @@
 import {ADD_QUESTION, ADD_ALL_QUESTION} from './actionTypes';
-
 import {_getQuestions, _saveQuestion, _saveQuestionAnswer} from './_DATA';
 import store from './store';
 
@@ -53,3 +52,14 @@ export const loadInitalQuestions = () => {
     );
   };
 };
+
+function generateUID() {
+  return (
+    Math.random()
+      .toString(36)
+      .substring(2, 15) +
+    Math.random()
+      .toString(36)
+      .substring(2, 15)
+  );
+}

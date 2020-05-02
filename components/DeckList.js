@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, ScrollView, View, Text} from 'react-native';
 import {connect} from 'react-redux';
+import {SafeAreaView, StyleSheet, ScrollView, View, Text} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {loadInitalQuestions} from '../redux/actions';
+import {loadInitalQuestions, storeData, getData} from '../redux/actions';
 
 class DeckList extends Component {
   state = {};
@@ -18,28 +18,38 @@ class DeckList extends Component {
     );
   };
 
-  render() {
+  genertateQuestionGrouping = () => {
     const {questions} = this.props;
-    console.log(questions);
+
+    const allAuthors = Object.keys(questions).map(function(id, index) {
+      //console.log(questions[id]);
+      return (
+        <View style={styles.body}>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>{questions[id].title}</Text>
+            <Text style={styles.sectionDescription}># Cards</Text>
+          </View>
+        </View>
+      );
+    });
+  };
+
+  render() {
     return (
       <SafeAreaView>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           {this.deckItem()}
-          {this.deckItem()}
-          {this.deckItem()}
-          {this.deckItem()}
-          {this.deckItem()}
-          {this.deckItem()}
-          {this.deckItem()}
+
+          {this.genertateQuestionGrouping()}
         </ScrollView>
       </SafeAreaView>
     );
   }
 
   componentDidMount() {
-    const {questions, loadInitalQuestions} = this.props;
+    const {questions, loadInitalQuestions, storeData, getData} = this.props;
 
     if (
       Object.keys(questions).length === 0 &&
@@ -47,8 +57,11 @@ class DeckList extends Component {
     ) {
       loadInitalQuestions();
       console.log(
-        'loading questions from mock db becasue not persisted in local storage',
+        'loading questions from mock db becasue not in local storage',
       );
+    } else {
+      console.log('questions already in local storage');
+      // console.log(questions);
     }
   }
 }
@@ -59,7 +72,7 @@ const mapStateToProps = ({questions}) => {
   };
 };
 
-const mapDispatchToProps = {loadInitalQuestions};
+const mapDispatchToProps = {loadInitalQuestions, storeData, getData};
 
 export default connect(
   mapStateToProps,
