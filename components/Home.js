@@ -3,6 +3,7 @@ import {Animated, StatusBar} from 'react-native';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import NewDeck from './NewDeck';
 import DeckList from './DeckList';
@@ -18,18 +19,35 @@ function MyTabs() {
       initialRouteName="DeckList"
       tabBarOptions={{
         activeTintColor: '#e91e63',
-        labelStyle: {fontSize: 20},
-        style: {backgroundColor: 'powderblue'},
-      }}>
+      }} /*
+      tabBarOptions={{
+        activeTintColor: '#e91e63',
+        labelStyle: {fontSize: 40},
+        activeBackgroundColor: '#a6cee0',
+        inactiveBackgroundColor: '#c3dbe5',
+        tabStyle: {backgroundColor: '#d1d4d6'},
+        // style: {backgroundColor: 'powderblue'},
+      }}*/
+    >
       <Tab.Screen
         name="DeckList"
         component={DeckListStack}
-        options={{tabBarLabel: 'Deck List'}}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons name="home" color={color} size={size} />
+          ),
+        }}
       />
       <Tab.Screen
         name="NewDeck"
         component={NewDeckStack}
-        options={{tabBarLabel: 'New Deck'}}
+        options={{
+          tabBarLabel: 'New Deck',
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons name="bell" color={color} size={size} />
+          ),
+        }}
       />
     </Tab.Navigator>
   );

@@ -1,17 +1,27 @@
-import {ADD_QUESTION, ADD_ALL_QUESTION} from './actionTypes';
-import {_getQuestions, _saveQuestion, _saveQuestionAnswer} from './_DATA';
+import {ADD_QUESTION, ADD_ALL_QUESTION, ADD_DECK} from './actionTypes';
+import {_getInitialDeck} from './_DATA';
 import store from './store';
 
-export const addQuestion = ({id, author, timestamp, optionOne, optionTwo}) => ({
+//this will need to be fixed
+export const addQuestion = ({question, answer}) => ({
   type: ADD_QUESTION,
   payload: {
-    id: id,
-    author: author,
-    timestamp: timestamp,
-    optionOne: optionOne,
-    optionTwo: optionTwo,
+    question: question,
+    answer: answer,
   },
 });
+
+export const addDeck = (id, title) => ({
+  type: ADD_DECK,
+  payload: {
+    id: id,
+    title: title,
+  },
+});
+
+export const saveDeck = deckTitle => {
+  store.dispatch(addDeck(generateUID(), deckTitle));
+};
 
 export const addAllQuestion = questions => ({
   type: ADD_ALL_QUESTION,
@@ -20,31 +30,9 @@ export const addAllQuestion = questions => ({
   },
 });
 
-export const saveQuestion = questionObject => {
+export const loadInitalDeck = () => {
   return function(dispatch) {
-    return _saveQuestion(questionObject).then(
-      ques => {
-        dispatch(addQuestion(ques));
-      },
-      error => console.log(error),
-    );
-  };
-};
-
-export const saveQuestionAnswer = questionObject => {
-  return function(dispatch) {
-    return _saveQuestionAnswer(questionObject).then(
-      ans => {
-        dispatch(saveAnswer(questionObject));
-      },
-      error => console.log(error),
-    );
-  };
-};
-
-export const loadInitalQuestions = () => {
-  return function(dispatch) {
-    return _getQuestions().then(
+    return _getInitialDeck().then(
       ques => {
         store.dispatch(addAllQuestion(ques));
       },
@@ -53,7 +41,7 @@ export const loadInitalQuestions = () => {
   };
 };
 
-function generateUID() {
+export const generateUID = () => {
   return (
     Math.random()
       .toString(36)
@@ -62,4 +50,4 @@ function generateUID() {
       .toString(36)
       .substring(2, 15)
   );
-}
+};

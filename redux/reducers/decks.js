@@ -1,17 +1,13 @@
-import {ADD_QUESTION, ADD_ALL_QUESTION} from '../actionTypes.js';
+import {ADD_QUESTION, ADD_ALL_QUESTION, ADD_DECK} from '../actionTypes.js';
 
 export default function(state = {}, action) {
   switch (action.type) {
     case ADD_QUESTION: {
-      const {id, author, optionOne, optionTwo, timestamp} = action.payload;
+      const {id, questionArray} = action.payload;
       return {
         ...state,
         [id]: {
-          id: id,
-          author: author,
-          optionOne: optionOne,
-          optionTwo: optionTwo,
-          timestamp,
+          ...questionArray,
         },
       };
     }
@@ -19,6 +15,15 @@ export default function(state = {}, action) {
       return {
         ...state,
         ...action.payload.questions,
+      };
+    }
+    case ADD_DECK: {
+      const {id, title} = action.payload;
+      return {
+        ...state,
+        [id]: {
+          title: title,
+        },
       };
     }
     default:

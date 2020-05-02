@@ -1,37 +1,55 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {SafeAreaView, StyleSheet, ScrollView, View, Text} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {loadInitalQuestions, storeData, getData} from '../redux/actions';
+import {loadInitalDeck} from '../redux/actions';
 
 class DeckList extends Component {
   state = {};
 
-  deckItem = () => {
-    return (
-      <View style={styles.body}>
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Deck Name</Text>
-          <Text style={styles.sectionDescription}># Cards</Text>
-        </View>
-      </View>
-    );
-  };
-
   genertateQuestionGrouping = () => {
-    const {questions} = this.props;
+    const {decks} = this.props;
+    let allAuthors = <Text />;
+    let cards = 0;
 
-    const allAuthors = Object.keys(questions).map(function(id, index) {
-      //console.log(questions[id]);
-      return (
-        <View style={styles.body}>
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>{questions[id].title}</Text>
-            <Text style={styles.sectionDescription}># Cards</Text>
-          </View>
-        </View>
-      );
-    });
+    const jumpToQuizWindow = quizId => {
+      const {navigation} = this.props;
+      navigation.navigate('DeckView', {
+        itemId: quizId,
+      });
+    };
+
+    if (decks.constructor === Object) {
+      allAuthors = Object.keys(decks).map(function(id, index) {
+        const {title, questions} = decks[id];
+
+        cards =
+          questions !== undefined && questions.constructor === Array
+            ? questions.length
+            : 0;
+        return (
+          <TouchableOpacity
+            key={id}
+            onPress={e => {
+              jumpToQuizWindow(id);
+            }}
+            style={styles.body}>
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>{title}</Text>
+              <Text style={styles.sectionDescription}>{cards} Cards</Text>
+            </View>
+          </TouchableOpacity>
+        );
+      });
+    }
+    return allAuthors;
   };
 
   render() {
@@ -40,8 +58,6 @@ class DeckList extends Component {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
-          {this.deckItem()}
-
           {this.genertateQuestionGrouping()}
         </ScrollView>
       </SafeAreaView>
@@ -49,30 +65,25 @@ class DeckList extends Component {
   }
 
   componentDidMount() {
-    const {questions, loadInitalQuestions, storeData, getData} = this.props;
+    const {decks, loadInitalDeck} = this.props;
 
-    if (
-      Object.keys(questions).length === 0 &&
-      questions.constructor === Object
-    ) {
-      loadInitalQuestions();
-      console.log(
-        'loading questions from mock db becasue not in local storage',
-      );
+    if (Object.keys(decks).length === 0 && decks.constructor === Object) {
+      loadInitalDeck();
+      console.log('loading questions from mock db no data in local storage');
     } else {
-      console.log('questions already in local storage');
-      // console.log(questions);
+      console.log('questions loaded from local storage');
+      console.log(decks);
     }
   }
 }
 
-const mapStateToProps = ({questions}) => {
+const mapStateToProps = ({decks}) => {
   return {
-    questions: questions,
+    decks: decks,
   };
 };
 
-const mapDispatchToProps = {loadInitalQuestions, storeData, getData};
+const mapDispatchToProps = {loadInitalDeck};
 
 export default connect(
   mapStateToProps,
@@ -88,14 +99,14 @@ const styles = StyleSheet.create({
     right: 0,
   },
   body: {
-    backgroundColor: Colors.white,
+    backgroundColor: '#e5dfde',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 10,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   sectionContainer: {
-    marginTop: 32,
+    marginTop: 20,
+    marginBottom: 20,
     paddingHorizontal: 24,
   },
   sectionTitle: {

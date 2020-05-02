@@ -18,5 +18,6 @@ const store = createStore(persistedReducer, compose(applyMiddleware(thunk)));
 
 export let persistor = persistStore(store);
 export default store;
-//persistor.persist();
-// persistor.purge();
+
+//use the folowing to purge the data
+persistor.purge();
