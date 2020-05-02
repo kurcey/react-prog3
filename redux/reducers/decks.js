@@ -1,4 +1,9 @@
-import {ADD_QUESTION, ADD_ALL_QUESTION, ADD_DECK} from '../actionTypes.js';
+import {
+  ADD_QUESTION,
+  ADD_ALL_QUESTION,
+  ADD_DECK,
+  ADD_CARD,
+} from '../actionTypes.js';
 
 export default function(state = {}, action) {
   switch (action.type) {
@@ -23,6 +28,20 @@ export default function(state = {}, action) {
         ...state,
         [id]: {
           title: title,
+        },
+      };
+    }
+    case ADD_CARD: {
+      const {deckID, question, answer} = action.payload;
+      const origionalQuesiton = state[deckID].questions;
+      origionalQuesiton.push({question: question, answer: answer});
+      const origionalTitle = state[deckID].title;
+      console.log(origionalQuesiton);
+      return {
+        ...state,
+        [deckID]: {
+          title: origionalTitle,
+          questions: origionalQuesiton,
         },
       };
     }

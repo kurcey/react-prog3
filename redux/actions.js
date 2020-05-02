@@ -1,4 +1,9 @@
-import {ADD_QUESTION, ADD_ALL_QUESTION, ADD_DECK} from './actionTypes';
+import {
+  ADD_QUESTION,
+  ADD_ALL_QUESTION,
+  ADD_DECK,
+  ADD_CARD,
+} from './actionTypes';
 import {_getInitialDeck} from './_DATA';
 import store from './store';
 
@@ -19,8 +24,25 @@ export const addDeck = (id, title) => ({
   },
 });
 
+export const addCard = (deckID, question, answer) => ({
+  type: ADD_CARD,
+  payload: {
+    deckID: deckID,
+    question: question,
+    answer: answer,
+  },
+});
+
 export const saveDeck = deckTitle => {
-  store.dispatch(addDeck(generateUID(), deckTitle));
+  const newID = generateUID();
+  store.dispatch(addDeck(newID, deckTitle));
+  return newID;
+};
+
+export const addCardToDeck = (deckID, {question, answer}) => {
+  const cardID = generateUID();
+  store.dispatch(addCard(deckID, question, answer));
+  return cardID;
 };
 
 export const addAllQuestion = questions => ({

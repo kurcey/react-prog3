@@ -69,13 +69,8 @@ function NewDeckStack() {
         }
       />
       <Stack.Screen
-        name="AddCard"
-        component={AddCard}
-        options={{headerStyleInterpolator: forFade}}
-      />
-      <Stack.Screen
-        name="Quiz"
-        component={Quiz}
+        name="DeckView"
+        component={DeckView}
         options={{headerStyleInterpolator: forFade}}
       />
     </Stack.Navigator>
@@ -98,6 +93,16 @@ function DeckListStack() {
       <Stack.Screen
         name="DeckView"
         component={DeckView}
+        options={{headerStyleInterpolator: forFade}}
+      />
+      <Stack.Screen
+        name="Quiz"
+        component={Quiz}
+        options={{headerStyleInterpolator: forFade}}
+      />
+      <Stack.Screen
+        name="AddCard"
+        component={AddCard}
         options={{headerStyleInterpolator: forFade}}
       />
     </Stack.Navigator>

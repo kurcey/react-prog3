@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {loadInitalDeck} from '../redux/actions';
 

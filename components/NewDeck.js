@@ -6,28 +6,6 @@ import {storeData, getData, saveDeck} from '../redux/actions';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
 
-const genertateQuestionGrouping = () => {
-  const {decks} = this.props;
-  let allAuthors = <Text />;
-  let cards = 0;
-
-  if (decks.constructor === Object) {
-    allAuthors = Object.keys(decks).map(function(id, index) {
-      const {title, questions} = decks[id];
-      cards = questions.constructor === Array ? questions.length : 0;
-      return (
-        <View key={id} style={styles.body}>
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>{title}</Text>
-            <Text style={styles.sectionDescription}>{cards} Cards</Text>
-          </View>
-        </View>
-      );
-    });
-  }
-  return allAuthors;
-};
-
 class NewDeck extends Component {
   state = {
     title: '',
@@ -37,11 +15,13 @@ class NewDeck extends Component {
     this.setState({title: text});
   };
 
-  stateTitle = title => {
-    saveDeck(title);
-    const {navigation} = this.props;
+  jumpToDeckViewWindow = title => {
+    const newID = saveDeck(title);
     this.setState({title: ''});
-    navigation.navigate('DeckView');
+    const {navigation} = this.props;
+    navigation.navigate('DeckView', {
+      itemId: newID,
+    });
   };
 
   render() {
@@ -67,7 +47,7 @@ class NewDeck extends Component {
             raised={true}
             type="outline"
             buttonStyle={styles.submitButton}
-            onPress={() => this.stateTitle(this.state.title)}
+            onPress={() => this.jumpToDeckViewWindow(this.state.title)}
           />
         </View>
       </View>

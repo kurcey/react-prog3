@@ -1,75 +1,115 @@
 import React, {Component} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  StyleSheet,
-} from 'react-native';
+
+import {connect} from 'react-redux';
+import {storeData, getData, addCardToDeck} from '../redux/actions';
+
+import {View, Text, TextInput, StyleSheet} from 'react-native';
+import {Button} from 'react-native-elements';
 
 class AddCard extends Component {
   state = {
-    email: '',
-    password: '',
+    title: '',
   };
-  handleEmail = text => {
-    this.setState({email: text});
+
+  handleQuestion = text => {
+    this.setState({question: text});
   };
-  handlePassword = text => {
-    this.setState({password: text});
+
+  handleAnswer = text => {
+    this.setState({answer: text});
   };
-  login = (email, pass) => {
-    alert('email: ' + email + ' password: ' + pass);
+
+  jumpToAddCardWindow = () => {
+    const {navigation, route} = this.props;
+    const {deckID} = route.params;
+    addCardToDeck(deckID, this.state);
+    this.setState({question: '', answer: ''});
+    navigation.navigate('DeckView', {
+      itemId: deckID,
+    });
   };
+
   render() {
     return (
       <View style={styles.container}>
         <TextInput
           style={styles.input}
           underlineColorAndroid="transparent"
-          placeholder="Email"
+          placeholder="Question"
           placeholderTextColor="#9a73ef"
           autoCapitalize="none"
-          onChangeText={this.handleEmail}
+          multiline={true}
+          onChangeText={this.handleQuestion}
+          value={this.state.question}
         />
 
         <TextInput
           style={styles.input}
           underlineColorAndroid="transparent"
-          placeholder="Password"
+          placeholder="Answer"
           placeholderTextColor="#9a73ef"
           autoCapitalize="none"
-          onChangeText={this.handlePassword}
+          multiline={true}
+          onChangeText={this.handleAnswer}
+          value={this.state.answer}
         />
 
-        <TouchableOpacity
-          style={styles.submitButton}
-          onPress={() => this.login(this.state.email, this.state.password)}>
-          <Text style={styles.submitButtonText}> Submit </Text>
-        </TouchableOpacity>
+        <View style={styles.btnContainer}>
+          <Button
+            title="Submit"
+            raised={true}
+            type="outline"
+            buttonStyle={styles.submitButton}
+            onPress={() => this.jumpToAddCardWindow()}
+          />
+        </View>
       </View>
     );
   }
 }
-export default AddCard;
+
+const mapStateToProps = ({decks}) => {
+  return {
+    decks: decks,
+  };
+};
+
+const mapDispatchToProps = {storeData, getData, addCardToDeck};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddCard);
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 23,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
   input: {
-    margin: 15,
-    height: 40,
-    borderColor: '#7a42f4',
-    borderWidth: 1,
+    marginHorizontal: 80,
+    marginTop: 30,
+    height: 100,
+    textAlign: 'center',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#66b0ff',
+    borderRadius: 20,
+    borderWidth: 0.25,
+    padding: 10,
+  },
+  btnContainer: {
+    marginTop: 30,
+    marginHorizontal: 80,
   },
   submitButton: {
-    backgroundColor: '#7a42f4',
-    padding: 10,
-    margin: 15,
-    height: 40,
+    borderRadius: 20,
+    borderWidth: 0.25,
   },
-  submitButtonText: {
-    color: 'white',
+  questionHeading: {
+    color: 'black',
+    fontSize: 40,
+    textAlign: 'center',
+    paddingHorizontal: 24,
   },
 });

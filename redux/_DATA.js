@@ -3,7 +3,7 @@ let decks = {
     title: 'Is this Udacity Reviewer Cool?',
     questions: [
       {
-        question: 'Will you let this app Pass on first Review?',
+        question: 'Will you let this app Pass on the first Review?',
         answer: '100% yes. (Well if you are cool) :)',
       },
       {
