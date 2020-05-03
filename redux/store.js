@@ -20,4 +20,4 @@ export let persistor = persistStore(store);
 export default store;
 
 //use the folowing to purge the data
-persistor.purge();
+// persistor.purge();

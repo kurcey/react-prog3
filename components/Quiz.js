@@ -6,44 +6,113 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Button} from 'react-native-elements';
 
 class Quiz extends Component {
-  jumpToQuizWindow = quizItems => {
-    const {navigation} = this.props;
-    navigation.navigate('Quiz', {
-      questions: quizItems,
+  state = {
+    currentQuestion: -1,
+    numberOfQuestions: 0,
+    numberOfQuestionsCorrect: 0,
+    questionVisable: true,
+    questions: [],
+  };
+
+  resetState = () => {
+    this.setState({
+      currentQuestion: -1,
+      numberOfQuestions: 0,
+      numberOfQuestionsCorrect: 0,
+      questionVisable: true,
+      questions: [],
     });
   };
 
-  renderQuestion = quizQuestion => {
-    return (
-      <View style={styles.body}>
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>{quizQuestion}</Text>
-          <TouchableOpacity
-            onPress={e => {
-              jumpToQuizWindow(id);
-            }}
-            style={styles.body}>
-            <Text style={styles.sectionAnswerLink}>Answer</Text>
-          </TouchableOpacity>
+  jumpToScoreWindow = () => {
+    const {navigation, route} = this.props;
+    navigation.navigate('Score', {
+      deckID: route.params.deckID,
+      numberOfQuestions: this.state.numberOfQuestions,
+      numberOfQuestionsCorrect: this.state.numberOfQuestionsCorrect,
+    });
+    this.componentDidMount();
+  };
+
+  renderQuestion = () => {
+    if (this.state.currentQuestion >= 0) {
+      const currentQuestion = this.state.questions[this.state.currentQuestion]
+        .question;
+      return (
+        <View style={styles.body}>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>{currentQuestion}</Text>
+            <TouchableOpacity
+              onPress={e => {
+                this.setState({questionVisable: false});
+              }}
+              style={styles.body}>
+              <Text style={styles.sectionAnswerLink}>Answer</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    );
+      );
+    }
+  };
+
+  renderNumberRemaining = () => {
+    if (this.state.currentQuestion >= 0) {
+      const currentQuestion = this.state.questions[this.state.currentQuestion]
+        .question;
+      return (
+        <View style={styles.body}>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>
+              {this.state.currentQuestion + 1} / {this.state.numberOfQuestions}
+            </Text>
+          </View>
+        </View>
+      );
+    }
+  };
+
+  renderAnswer = () => {
+    if (this.state.currentQuestion >= 0) {
+      const currentAnswer = this.state.questions[this.state.currentQuestion]
+        .answer;
+      return (
+        <View style={styles.body}>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>{currentAnswer}</Text>
+            <TouchableOpacity
+              onPress={e => {
+                this.setState({questionVisable: true});
+              }}
+              style={styles.body}>
+              <Text style={styles.sectionAnswerLink}>Question</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
   };
 
   render() {
-    const {navigation, route, decks} = this.props;
-    const {deckID} = route.params;
-    const {questions} = decks[deckID];
-    if (questions !== undefined && questions.constructor === Array) {
+    if (this.state.currentQuestion + 1 <= this.state.numberOfQuestions) {
+      const viewToShow = this.state.questionVisable
+        ? this.renderQuestion()
+        : this.renderAnswer();
       return (
         <View style={styles.container}>
-          {this.renderQuestion(questions[0].question)}
+          {viewToShow}
           <View style={styles.btnContainer}>
             <Button
               title="Correct"
               raised={true}
               buttonStyle={styles.correctButton}
-              onPress={() => this.stateTitle(this.state.title)}
+              onPress={() =>
+                this.setState({
+                  currentQuestion: this.state.currentQuestion + 1,
+                  numberOfQuestionsCorrect:
+                    this.state.numberOfQuestionsCorrect + 1,
+                  questionVisable: true,
+                })
+              }
             />
           </View>
 
@@ -52,11 +121,38 @@ class Quiz extends Component {
               title="Incorrect"
               raised={true}
               buttonStyle={styles.incorrectButton}
-              onPress={() => this.jumpToQuizWindow(itemId)}
+              onPress={() =>
+                this.setState({
+                  currentQuestion: this.state.currentQuestion + 1,
+                  questionVisable: true,
+                })
+              }
             />
           </View>
+          {this.renderNumberRemaining()}
         </View>
       );
+    } else {
+      this.jumpToScoreWindow();
+      return null;
+    }
+  }
+
+  componentDidMount() {
+    const {route, decks} = this.props;
+    const {deckID} = route.params;
+    const {questions} = decks[deckID];
+    //console.log(deckID);
+    if (questions !== undefined) {
+      const numberOfQuestions = questions.length;
+      this.setState({
+        deckID: route.params.deckID,
+        currentQuestion: 0,
+        numberOfQuestions: numberOfQuestions,
+        numberOfQuestionsCorrect: 0,
+        questionVisable: true,
+        questions: questions,
+      });
     }
   }
 }

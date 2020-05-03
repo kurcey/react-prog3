@@ -25,7 +25,7 @@ class AddCard extends Component {
     addCardToDeck(deckID, this.state);
     this.setState({question: '', answer: ''});
     navigation.navigate('DeckView', {
-      itemId: deckID,
+      deckID: deckID,
     });
   };
 

@@ -33,7 +33,7 @@ export const addCard = (deckID, question, answer) => ({
   },
 });
 
-export const saveDeck = deckTitle => {
+export const saveDeckTitle = deckTitle => {
   const newID = generateUID();
   store.dispatch(addDeck(newID, deckTitle));
   return newID;

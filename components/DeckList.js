@@ -24,7 +24,7 @@ class DeckList extends Component {
     const jumpToQuizWindow = quizId => {
       const {navigation} = this.props;
       navigation.navigate('DeckView', {
-        itemId: quizId,
+        deckID: quizId,
       });
     };
 
@@ -74,7 +74,6 @@ class DeckList extends Component {
       console.log('loading questions from mock db no data in local storage');
     } else {
       console.log('questions loaded from local storage');
-      console.log(decks);
     }
   }
 }

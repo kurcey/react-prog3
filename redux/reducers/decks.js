@@ -34,14 +34,17 @@ export default function(state = {}, action) {
     case ADD_CARD: {
       const {deckID, question, answer} = action.payload;
       const origionalQuesiton = state[deckID].questions;
-      origionalQuesiton.push({question: question, answer: answer});
+      const cards =
+        origionalQuesiton !== undefined
+          ? [...origionalQuesiton, {question: question, answer: answer}]
+          : [{question: question, answer: answer}];
+
       const origionalTitle = state[deckID].title;
-      console.log(origionalQuesiton);
       return {
         ...state,
         [deckID]: {
           title: origionalTitle,
-          questions: origionalQuesiton,
+          questions: cards,
         },
       };
     }

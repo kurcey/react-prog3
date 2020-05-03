@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {connect} from 'react-redux';
-import {storeData, getData, saveDeck} from '../redux/actions';
+import {storeData, getData, saveDeckTitle} from '../redux/actions';
 
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
@@ -16,11 +16,11 @@ class NewDeck extends Component {
   };
 
   jumpToDeckViewWindow = title => {
-    const newID = saveDeck(title);
+    const newID = saveDeckTitle(title);
     this.setState({title: ''});
     const {navigation} = this.props;
     navigation.navigate('DeckView', {
-      itemId: newID,
+      deckID: newID,
     });
   };
 
@@ -45,7 +45,6 @@ class NewDeck extends Component {
           <Button
             title="Submit"
             raised={true}
-            type="outline"
             buttonStyle={styles.submitButton}
             onPress={() => this.jumpToDeckViewWindow(this.state.title)}
           />
@@ -61,7 +60,7 @@ const mapStateToProps = ({decks}) => {
   };
 };
 
-const mapDispatchToProps = {storeData, getData, saveDeck};
+const mapDispatchToProps = {storeData, getData, saveDeckTitle};
 
 export default connect(
   mapStateToProps,

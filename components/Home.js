@@ -10,6 +10,7 @@ import DeckList from './DeckList';
 import DeckView from './DeckView';
 import AddCard from './AddCard';
 import Quiz from './Quiz';
+import Score from './Score';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -96,13 +97,18 @@ function DeckListStack() {
         options={{headerStyleInterpolator: forFade}}
       />
       <Stack.Screen
+        name="AddCard"
+        component={AddCard}
+        options={{headerStyleInterpolator: forFade}}
+      />
+      <Stack.Screen
         name="Quiz"
         component={Quiz}
         options={{headerStyleInterpolator: forFade}}
       />
       <Stack.Screen
-        name="AddCard"
-        component={AddCard}
+        name="Score"
+        component={Score}
         options={{headerStyleInterpolator: forFade}}
       />
     </Stack.Navigator>

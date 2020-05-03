@@ -1,58 +1,68 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Button} from 'react-native-elements';
 
-class DeckView extends Component {
+class Score extends Component {
+  state = {};
+
   jumpToQuizWindow = quizItems => {
     const {navigation} = this.props;
     navigation.navigate('Quiz', {
-      deckID: quizItems,
+      questions: this.state.deckID,
     });
   };
 
-  jumpToAddCardWindow = quizItems => {
+  jumpToDeckWindow = () => {
     const {navigation} = this.props;
-    navigation.navigate('AddCard', {
-      deckID: quizItems,
+
+    navigation.navigate('DeckView', {
+      deckID: this.state.deckID,
     });
   };
 
   render() {
-    const {decks} = this.props;
-    const {deckID} = this.props.route.params;
-    const {title, questions} = decks[deckID];
-    const cards =
-      questions !== undefined && questions.constructor === Array
-        ? questions.length
-        : 0;
-
     return (
       <View style={styles.container}>
         <View style={styles.body}>
           <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>{title}</Text>
-            <Text style={styles.sectionDescription}>{cards} Cards</Text>
+            <Text style={styles.sectionTitle}>
+              You got {this.state.numberOfQuestionsCorrect} out of{' '}
+              {this.state.numberOfQuestions}
+            </Text>
+            <TouchableOpacity onPress={e => {}} style={styles.body}>
+              <Text style={styles.sectionAnswerLink}>
+                that is{' '}
+                {Math.round(
+                  (this.state.numberOfQuestionsCorrect /
+                    this.state.numberOfQuestions) *
+                    100,
+                )}{' '}
+                Percent
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
-
         <View style={styles.btnContainer}>
           <Button
-            title="Add Card"
+            title="Start Quiz Over"
             raised={true}
             buttonStyle={styles.submitButton}
-            onPress={() => this.jumpToAddCardWindow(deckID)}
+            onPress={() => {
+              this.jumpToQuizWindow();
+            }}
           />
         </View>
 
         <View style={styles.btnContainer}>
           <Button
-            title="Start Quiz"
+            title="Go To Deck"
             raised={true}
             buttonStyle={styles.submitButton}
-            onPress={() => this.jumpToQuizWindow(deckID)}
+            onPress={() => {
+              this.jumpToDeckWindow();
+            }}
           />
         </View>
       </View>
@@ -60,35 +70,21 @@ class DeckView extends Component {
   }
 
   componentDidMount() {
-    //console.log(this.props.decks);
-    //wrie function here that gets individual deck information getDeck
-    /*  const {
+    const {
       deckID,
       numberOfQuestions,
       numberOfQuestionsCorrect,
     } = this.props.route.params;
-
+    //console.log(this.props.route.params);
     this.setState({
       deckID: deckID,
       numberOfQuestions: numberOfQuestions,
       numberOfQuestionsCorrect: numberOfQuestionsCorrect,
     });
-    */
   }
 }
 
-const mapStateToProps = ({decks}) => {
-  return {
-    decks: decks,
-  };
-};
-
-const mapDispatchToProps = {};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DeckView);
+export default Score;
 
 const styles = StyleSheet.create({
   container: {
@@ -142,6 +138,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '400',
     color: Colors.dark,
+    textAlign: 'center',
+  },
+  sectionAnswerLink: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '400',
+    color: '#ed020a',
     textAlign: 'center',
   },
 });
