@@ -58,7 +58,6 @@ class AddCard extends Component {
           <Button
             title="Submit"
             raised={true}
-            type="outline"
             buttonStyle={styles.submitButton}
             onPress={() => this.jumpToAddCardWindow()}
           />

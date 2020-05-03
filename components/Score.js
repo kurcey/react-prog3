@@ -46,7 +46,7 @@ class Score extends Component {
         </View>
         <View style={styles.btnContainer}>
           <Button
-            title="Start Quiz Over"
+            title="Restart Quiz"
             raised={true}
             buttonStyle={styles.submitButton}
             onPress={() => {
@@ -57,7 +57,7 @@ class Score extends Component {
 
         <View style={styles.btnContainer}>
           <Button
-            title="Go To Deck"
+            title="Back to Deck"
             raised={true}
             buttonStyle={styles.submitButton}
             onPress={() => {

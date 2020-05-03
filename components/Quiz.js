@@ -5,6 +5,8 @@ import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Button} from 'react-native-elements';
 
+import {clearLocalNotification, setLocalNotification} from '../utils/helpers';
+
 class Quiz extends Component {
   state = {
     currentQuestion: -1,
@@ -47,7 +49,7 @@ class Quiz extends Component {
                 this.setState({questionVisable: false});
               }}
               style={styles.body}>
-              <Text style={styles.sectionAnswerLink}>Answer</Text>
+              <Text style={styles.sectionAnswerLink}>Show Answer</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -93,7 +95,10 @@ class Quiz extends Component {
   };
 
   render() {
-    if (this.state.currentQuestion + 1 <= this.state.numberOfQuestions) {
+    if (
+      this.state.numberOfQuestions !== 0 &&
+      this.state.currentQuestion + 1 <= this.state.numberOfQuestions
+    ) {
       const viewToShow = this.state.questionVisable
         ? this.renderQuestion()
         : this.renderAnswer();
@@ -133,12 +138,38 @@ class Quiz extends Component {
         </View>
       );
     } else {
-      this.jumpToScoreWindow();
-      return null;
+      return (
+        <View style={styles.body}>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>
+              You need to enter some questions my Friend
+            </Text>
+          </View>
+        </View>
+      );
     }
   }
 
+  componentDidUpdate() {
+    if (
+      this.state !== null &&
+      this.state.numberOfQuestions !== 0 &&
+      this.state.currentQuestion + 1 > this.state.numberOfQuestions
+    )
+      this.jumpToScoreWindow();
+  }
+
   componentDidMount() {
+    clearLocalNotification()
+      .then(setLocalNotification)
+      .catch(function(error) {
+        console.log(
+          'There has been a problem with setting up your notification (need to run in EXPO) continuing on : ',
+        );
+        // ADD THIS THROW error
+        // throw error;
+      });
+
     const {route, decks} = this.props;
     const {deckID} = route.params;
     const {questions} = decks[deckID];

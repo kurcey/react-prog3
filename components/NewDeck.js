@@ -43,7 +43,7 @@ class NewDeck extends Component {
 
         <View style={styles.btnContainer}>
           <Button
-            title="Submit"
+            title="Create Deck"
             raised={true}
             buttonStyle={styles.submitButton}
             onPress={() => this.jumpToDeckViewWindow(this.state.title)}

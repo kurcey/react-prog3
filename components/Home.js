@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {Animated, StatusBar} from 'react-native';
+import {Animated} from 'react-native';
 
 import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/AntDesign';
 
 import NewDeck from './NewDeck';
 import DeckList from './DeckList';
@@ -19,24 +19,16 @@ function MyTabs() {
     <Tab.Navigator
       initialRouteName="DeckList"
       tabBarOptions={{
-        activeTintColor: '#e91e63',
-      }} /*
-      tabBarOptions={{
-        activeTintColor: '#e91e63',
-        labelStyle: {fontSize: 40},
-        activeBackgroundColor: '#a6cee0',
-        inactiveBackgroundColor: '#c3dbe5',
-        tabStyle: {backgroundColor: '#d1d4d6'},
-        // style: {backgroundColor: 'powderblue'},
-      }}*/
-    >
+        activeTintColor: 'tomato',
+        inactiveTintColor: 'gray',
+      }}>
       <Tab.Screen
         name="DeckList"
         component={DeckListStack}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+            <Ionicons name="home" color={color} size={size} />
           ),
         }}
       />
@@ -46,7 +38,7 @@ function MyTabs() {
         options={{
           tabBarLabel: 'New Deck',
           tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons name="bell" color={color} size={size} />
+            <Ionicons name="addfile" color={color} size={size} />
           ),
         }}
       />
